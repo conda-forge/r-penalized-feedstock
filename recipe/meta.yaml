@@ -1,4 +1,4 @@
-{% set version = '0.9-50' %}
+{% set version = "0.9-51" %}
 
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
@@ -12,7 +12,7 @@ source:
   url:
     - https://cran.r-project.org/src/contrib/penalized_{{ version }}.tar.gz
     - https://cran.r-project.org/src/contrib/Archive/penalized/penalized_{{ version }}.tar.gz
-  sha256: 66ed84b967f70fd49702318e43e129c2ff60bb0631b81fe2617671d1ebbbc060
+  sha256: be09693cf00d721b79ef32fadd7955a0e958217ad4cf08a4ddfc27ab5a545bbb
 
 build:
   number: 0
