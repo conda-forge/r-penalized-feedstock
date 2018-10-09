@@ -1,5 +1,4 @@
-{% set version = "0.9-51" %}
-
+{% set version = '0.9-51' %}
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
 
@@ -10,41 +9,43 @@ package:
 source:
   fn: penalized_{{ version }}.tar.gz
   url:
-    - https://cran.r-project.org/src/contrib/penalized_{{ version }}.tar.gz
-    - https://cran.r-project.org/src/contrib/Archive/penalized/penalized_{{ version }}.tar.gz
+    - {{ cran_mirror }}/src/contrib/penalized_{{ version }}.tar.gz
+    - {{ cran_mirror }}/src/contrib/Archive/penalized/penalized_{{ version }}.tar.gz
   sha256: eaa80dca99981fb9eb576261f30046cfe492d014cc2bf286c447b03a92e299fd
 
 build:
   merge_build_host: True  # [win]
-  number: 1
+  number: 2
   skip: true  # [win32]
-
   rpaths:
     - lib/R/lib/
     - lib/
 
 requirements:
   build:
-    - posix                # [win]
-    - {{ compiler('c') }}        # [unix]
-    - {{ compiler('m2w64_c') }}  # [win]
-    - {{ compiler('cxx') }}        # [unix]
-    - {{ compiler('m2w64_cxx') }}  # [win]
+    - {{ compiler('c') }}        # [not win]
+    - {{ compiler('cxx') }}      # [not win]
+    - {{native}}toolchain        # [win]
+    - {{posix}}filesystem        # [win]
+    - {{posix}}make
+    - {{posix}}sed               # [win]
+    - {{posix}}coreutils         # [win]
+    - {{posix}}zip               # [win]
   host:
     - r-base
     - r-rcpp
     - r-rcpparmadillo
     - r-survival
-
   run:
     - r-base
+    - {{native}}gcc-libs         # [win]
     - r-rcpp
     - r-rcpparmadillo
     - r-survival
 
 test:
   commands:
-    - $R -e "library('penalized')"  # [not win]
+    - $R -e "library('penalized')"           # [not win]
     - "\"%R%\" -e \"library('penalized')\""  # [win]
 
 about:
@@ -56,6 +57,8 @@ about:
     models are linear, logistic and Poisson regression and the Cox Proportional Hazards
     model. Cross-validation routines allow optimization of the tuning parameters.
   license_family: GPL3
+  license_file: '{{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-3'  # [unix]
+  license_file: '{{ environ["PREFIX"] }}\R\share\licenses\GPL-3'  # [win]
 
 extra:
   recipe-maintainers:
@@ -63,3 +66,5 @@ extra:
     - bgruening
     - daler
     - jdblischak
+    - cbrueffer
+    - dbast
