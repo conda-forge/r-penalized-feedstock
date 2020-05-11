@@ -7,7 +7,6 @@ package:
   version: {{ version|replace("-", "_") }}
 
 source:
-  fn: penalized_{{ version }}.tar.gz
   url:
     - {{ cran_mirror }}/src/contrib/penalized_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/penalized/penalized_{{ version }}.tar.gz
@@ -15,8 +14,7 @@ source:
 
 build:
   merge_build_host: True  # [win]
-  number: 1004
-  skip: true  # [win32]
+  number: 1005
   rpaths:
     - lib/R/lib/
     - lib/
@@ -33,6 +31,8 @@ requirements:
     - {{ posix }}coreutils         # [win]
     - {{ posix }}zip               # [win]
   host:
+    - libblas
+    - liblapack
     - r-base
     - r-rcpp
     - r-rcpparmadillo
@@ -51,7 +51,7 @@ test:
 
 about:
   home: https://CRAN.R-project.org/package=penalized
-  license: GPL (>= 2)
+  license: GPL-2.0-or-later
   summary: Fitting possibly high dimensional penalized regression models. The penalty structure
     can be any combination of an L1 penalty (lasso and fused lasso), an L2 penalty (ridge)
     and a positivity constraint on the regression coefficients. The supported regression
@@ -63,9 +63,3 @@ about:
 extra:
   recipe-maintainers:
     - conda-forge/r
-    - johanneskoester
-    - bgruening
-    - daler
-    - jdblischak
-    - cbrueffer
-    - dbast
